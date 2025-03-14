@@ -4,6 +4,7 @@ const secret = process.env.JWTsecret;
 
 
 const authMiddleware = async (request, response, next) => {
+  
   const authHeader = request.headers.authorization;
 
 
@@ -16,8 +17,10 @@ const authMiddleware = async (request, response, next) => {
 
   const token = authHeader.split(" ")[1];
 
+
   try {
     const decoded = jwt.verify(token, secret);
+     
     if (decoded.userId) {
       request.userId = decoded.userId;
       next();

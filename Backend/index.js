@@ -20,6 +20,6 @@ app.use('/api/v1/account',accountRouter);
 
 
 // app
-app.listen(3000, ()=>{
+app.listen(5000, ()=>{
     console.log("App is runnning on port 5000");
 });

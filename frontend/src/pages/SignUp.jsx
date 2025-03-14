@@ -1,8 +1,45 @@
-import React from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
 import Navbarlogin from "../components/Navbarlogin";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
-const Signup = () => {
+const Signup = ({setUser}) => {
+ 
+  const [firstname,setFirstname]=useState("");
+  const [lastname,setLastname]=useState("");
+  const [username,setUsername]=useState("");
+  const [password,setPassword]=useState("");
+  const navigate = useNavigate();
+
+
+
+  const signUp = async () => {
+    try {
+        setUser(username);
+        const response =await axios.post("http://localhost:5000/api/v1/user/signup",{
+          firstname,
+          lastname,
+          username,
+          password
+        });
+
+        localStorage.setItem("token",response.data.token);
+        setUsername("");
+        setPassword(""); 
+        setFirstname("");
+        setLastname("");   
+        navigate("/dashboard");
+
+       
+       
+          
+       
+    } catch (error) {
+      console.log(error);
+      alert(error.response.data.message);
+    }
+  }
   return (
     <div className="relative w-full h-screen max-h-screen overflow-hidden bg-black">
       {/* Background */}
@@ -53,10 +90,12 @@ const Signup = () => {
                     First Name
                   </label>
                   <input
+                    onChange={(e)=>setFirstname(e.target.value)}
                     type="text"
                     name="firstName"
                     className="w-full p-3 bg-gray-800 bg-opacity-50 border border-gray-600 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
                     placeholder="John"
+                    value={firstname}
                   />
                 </div>
                 <div>
@@ -64,10 +103,12 @@ const Signup = () => {
                     Last Name
                   </label>
                   <input
+                    onChange={(e)=>setLastname(e.target.value)}
                     type="text"
                     name="lastName"
                     className="w-full p-3 bg-gray-800 bg-opacity-50 border border-gray-600 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
                     placeholder="Doe"
+                    value={lastname}
                   />
                 </div>
               </div>
@@ -78,10 +119,12 @@ const Signup = () => {
                   Username
                 </label>
                 <input
+                  onChange={(e)=>setUsername(e.target.value)}
                   type="text"
                   name="username"
                   className="w-full p-3 bg-gray-800 bg-opacity-50 border border-gray-600 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
                   placeholder="Username"
+                  value={username}
                 />
               </div>
               <div className="mb-4">
@@ -89,15 +132,18 @@ const Signup = () => {
                   Password
                 </label>
                 <input
+                  onChange={(e)=>setPassword(e.target.value)}
                   type="password"
                   name="email"
                   className="w-full p-3 bg-gray-800 bg-opacity-50 border border-gray-600 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
                   placeholder="Password"
+                  value={password}
                 />
               </div>
 
               {/* Sign Up Button */}
               <motion.button
+                onClick={signUp}
                 whileHover={{
                   scale: 1.05,
                   boxShadow: "0px 0px 15px rgba(0, 162, 255, 0.5)",
@@ -110,7 +156,7 @@ const Signup = () => {
 
               {/* Extra Links */}
               <div className="text-gray-400 text-sm mt-4 text-center">
-                <button className="hover:text-white transition">
+                <button onClick={()=>navigate("/signin")} className="hover:text-white transition">
                   Already have an account? Sign In
                 </button>
               </div>

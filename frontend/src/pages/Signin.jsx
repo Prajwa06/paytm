@@ -1,8 +1,30 @@
-import React from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
 import Navbarlogin from "../components/Navbarlogin";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
-function Signin() {
+function Signin({setUser}) {
+  const [username,setUsername]=useState("");
+    const [password,setPassword]=useState("");
+    const navigate = useNavigate();
+
+    const handleSignin=async()=>{
+        try {
+            const response =await axios.post("http://localhost:5000/api/v1/user/signin",{
+              username,
+              password
+            });
+            localStorage.setItem("token",response.data.token);
+            setUsername("");
+            setPassword(""); 
+            setUser(username);
+            navigate("/dashboard");
+        } catch (error) {
+          console.log(error);
+          alert(error.response.data.message);
+        }
+    }
   return (
     <>
       <div className="relative w-full h-screen max-h-screen overflow-hidden bg-black">
@@ -53,6 +75,8 @@ function Signin() {
                     Username
                   </label>
                   <input
+                    onChange={(e)=>setUsername(e.target.value)}
+                    value={username}
                     type="text"
                     name="username"
                     className="w-full p-3 bg-gray-800 bg-opacity-50 border border-gray-600 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
@@ -65,6 +89,8 @@ function Signin() {
                     Password
                   </label>
                   <input
+                  onChange={(e)=>setPassword(e.target.value)}
+                  value={password}
                     type="password"
                     name="password"
                     className="w-full p-3 bg-gray-800 bg-opacity-50 border border-gray-600 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
@@ -74,6 +100,7 @@ function Signin() {
 
                 {/* Sign Up Button */}
                 <motion.button
+                  onClick={handleSignin}
                   whileHover={{
                     scale: 1.05,
                     boxShadow: "0px 0px 15px rgba(0, 162, 255, 0.5)",
@@ -86,8 +113,8 @@ function Signin() {
 
                 {/* Extra Links */}
                 <div className="text-gray-400 text-sm mt-4 text-center">
-                  <button className="hover:text-white transition">
-                    Already have an account? Sign In
+                  <button onClick={()=>navigate('/signup')} className="hover:text-white transition">
+                    Don't have an account? Sign up
                   </button>
                 </div>
               </motion.div>

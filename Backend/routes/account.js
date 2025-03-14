@@ -6,6 +6,7 @@ const { default: mongoose } = require("mongoose");
 const router = express.Router();
 
 router.get("/balance", authMiddleware, async (request, response) => {
+  console.log("backend hit")
   try {
     const account = await Account.findOne({
       user: request.userId,

@@ -11,7 +11,7 @@ const bcrypt = require("bcrypt");
 const authMiddleware = require("../middlewares/auth");
 const updateUserSchema = require("../validations/updateUserSchema");
 
-// sign in route
+// sign up route
 router.post("/signup", async (request, response) => {
   try {
     const body = request.body;
@@ -126,8 +126,10 @@ router.post("/signin", async (request, response) => {
 });
 
 router.put("/", authMiddleware, async (request, response) => {
-  const success = updateUserSchema.safeParse(request.body).success;
+  
 
+  const success = updateUserSchema.safeParse(request.body).success;
+  
   if (!success) {
     response.status(400).json({
       message: "Incorrect Inputs Please  enter valid inputs",
@@ -137,6 +139,7 @@ router.put("/", authMiddleware, async (request, response) => {
 
   try {
     const updateData = {};
+   
     if (request.body.firstname) {
       updateData.firstname = request.body.firstname;
     }
@@ -147,6 +150,8 @@ router.put("/", authMiddleware, async (request, response) => {
       const hashedPassword = await bcrypt.hash(request.body.password, 10);
       updateData.password = hashedPassword;
     }
+
+  
 
     if (Object.keys(updateData).length === 0) {
       return response
