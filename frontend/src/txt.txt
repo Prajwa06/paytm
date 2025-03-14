@@ -1,0 +1,9 @@
+ // <div className='navbar flex  bg-gradient-to-b from bg-blue-500 to blue-400'>
+        //     <div className='flex-1 text-center md:text-left'>
+        //         <h1 className=' text-white text-xl font-bold p-5'>PayAPP</h1>
+        //     </div>
+        //     <div className='flex '>
+        //         <Button text={"Login"} />
+        //         <Button text={"Signup"} />
+        //     </div>
+        // </div>
